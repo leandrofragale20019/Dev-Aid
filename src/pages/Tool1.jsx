@@ -18,7 +18,7 @@ const Tool1 = () => {
       const formatted = JSON.stringify(parsed, null, 2);
       setOutput(formatted);
     } catch (e) {
-      setError('Ungültiges JSON Format: ' + e.message);
+      setError('Invalid JSON format: ' + e.message);
     }
   };
 
@@ -31,7 +31,7 @@ const Tool1 = () => {
       const minified = JSON.stringify(parsed);
       setOutput(minified);
     } catch (e) {
-      setError('Ungültiges JSON Format: ' + e.message);
+      setError('Invalid JSON format: ' + e.message);
     }
   };
 
@@ -64,31 +64,31 @@ const Tool1 = () => {
        <Header/>
       <div className="header-section">
         <h1>JSON Formatter</h1>
-        <p>Formatiere und validiere JSON Daten schnell und einfach</p>
+        <p>Format and validate JSON data quickly and easily.</p>
       </div>
 
       <div className="grid-layout">
         {/* Input Bereich */}
         <div className="card">
           <div className="card-header">
-            <h3>Eingabe</h3>
+            <h3>input</h3>
           </div>
           <div className="card-content">
             <textarea
-              placeholder='{"name": "Beispiel", "value": 123}'
+              placeholder='{"name": "example", "value": 123}'
               value={input}
               onChange={(e) => setInput(e.target.value)}
               className="json-textarea"
             />
             <div className="button-group">
               <button onClick={formatJSON} className="btn btn-primary">
-                Formatieren
+              Format
               </button>
               <button onClick={minifyJSON} className="btn btn-secondary">
-                Minimieren
+              Minimize
               </button>
               <button onClick={clearAll} className="btn btn-outline">
-                Löschen
+                Delete
               </button>
             </div>
           </div>
@@ -97,11 +97,11 @@ const Tool1 = () => {
         {/* Output Bereich */}
         <div className="card">
           <div className="card-header">
-            <h3>Ausgabe</h3>
+            <h3>output</h3>
             {output && (
               <div className="action-buttons">
                 <button onClick={copyToClipboard} className="btn btn-ghost">
-                  {copied ? '✓ Kopiert!' : 'Kopieren'}
+                  {copied ? '✓ Copied!' : 'Copy'}
                 </button>
                 <button onClick={downloadJSON} className="btn btn-ghost">
                   Download
@@ -120,7 +120,7 @@ const Tool1 = () => {
                 value={output}
                 readOnly
                 className="json-textarea output-textarea"
-                placeholder="Formatiertes JSON erscheint hier..."
+                placeholder="Formated JSON appeares here ...."
               />
             )}
           </div>
@@ -130,21 +130,21 @@ const Tool1 = () => {
       {/* Info Bereich */}
       <div className="card info-card">
         <div className="card-header">
-          <h3>Funktionen</h3>
+          <h3>functions</h3>
         </div>
         <div className="card-content">
           <ul className="info-list">
             <li>
-              <strong>Formatieren:</strong> Macht JSON lesbar mit Einrückungen
+              <strong>Format:</strong> Makes JSON readable with indentation
             </li>
             <li>
-              <strong>Minimieren:</strong> Entfernt alle Leerzeichen für kompakte Darstellung
+              <strong>Minimize:</strong> Removes all spaces for compact display
             </li>
             <li>
-              <strong>Kopieren:</strong> Kopiert das formatierte JSON in die Zwischenablage
+              <strong>Copy:</strong> Copies the formatted JSON to the clipboard
             </li>
             <li>
-              <strong>Download:</strong> Lädt das JSON als Datei herunter
+              <strong>Download:</strong> Downloads the JSON as a file
             </li>
           </ul>
         </div>

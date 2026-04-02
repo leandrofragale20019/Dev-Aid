@@ -11,19 +11,19 @@ function Home() {
 
       <section className="hero">
         <h1>Deine Dev-Tools.</h1>
-        <p>Open source toolbox für programmierer</p>
+        <p>Open source toolbox for programming</p>
       </section>
 
       <section className="tools-section">
-        <h2 className="section-title">Tool-Übersicht</h2>
+        <h2 className="section-title">Tool-Overview</h2>
         <div className="tools-list">
           <Link to="/tool1" className="tool-item">
             <div className="tool-header">
-              <span className="tool-name">Tool 1</span>
+              <span className="tool-name">JSON formatter</span>
               <span className="tool-tag">Formatter</span>
             </div>
             <p className="tool-description">
-              Beschreibung des ersten Tools
+              Problems with reading JSON ?
             </p>
           </Link>
 
@@ -52,15 +52,16 @@ function Home() {
       <section className="stats">
         <div className="stat">
           <div className="stat-number">03</div>
-          <div className="stat-label">Tools verfügbar</div>
+          <div className="stat-label">Tools available</div>
         </div>
         <div className="stat">
           <div className="stat-number">00</div>
-          <div className="stat-label">Registrierungen nötig</div>
+          <div className="stat-label">
+          Registrations required</div>
         </div>
         <div className="stat">
           <div className="stat-number">∞</div>
-          <div className="stat-label">Für immer gratis</div>
+          <div className="stat-label">for ever free</div>
         </div>
       </section>
 

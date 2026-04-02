@@ -10,7 +10,7 @@ function Header() {
       <div className="logo">Dev-Aid</div>
       <nav>
         <Link to="/">Home</Link>
-        <Link to="/about">Über uns</Link>
+        <Link to="/about">About us</Link>
         <button 
           className="theme-toggle" 
           onClick={toggleTheme}
