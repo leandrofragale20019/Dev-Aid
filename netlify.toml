@@ -1,6 +1,6 @@
 [build]
-  command = "corepack enable && pnpm install && pnpm build"
+  command = "npm install --legacy-peer-deps && npm run build"
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "22.12.0"
+  NODE_VERSION = "20.19.0"
