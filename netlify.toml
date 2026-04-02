@@ -1,5 +1,5 @@
 [build]
-  command = "npm ci --legacy-peer-deps && npm run build"
+  command = "corepack enable && pnpm install && pnpm build"
   publish = "dist"
 
 [build.environment]
