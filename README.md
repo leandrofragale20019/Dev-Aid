@@ -1,19 +1,17 @@
-# React + Vite
+<h1 style="border-bottom: none;">Dev-Aid</h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:378ADD,100:0d1117&height=2&section=header"/>
 
-Currently, two official plugins are available:
+### About the project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+An open-source toolbox for developers with useful tools in one place.
 
-## React Compiler
+Dev-Aid is a comprehensive collection of practical developer tools that make your daily work easier. Instead of using various websites or apps, you'll find all the essential tools centrally in one place.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:378ADD,100:0d1117&height=2&section=header"/>
 
-Note: This will impact Vite dev & build performances.
+### About us
 
-## Expanding the ESLint configuration
+2 IT apprentices who are tired of using 100 different tools and building a useful toolbox for ourselves.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# Dev-Aid
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:378ADD,100:0d1117&height=2&section=header"/>
