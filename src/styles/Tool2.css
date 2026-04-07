@@ -1,0 +1,515 @@
+/* ============================================
+   COLOR PICKER - Tool2.css
+   Follows the same design language as Tool1
+   ============================================ */
+
+.color-picker-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+     HEADER SECTION
+     ============================================ */
+
+.header-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.header-section h1 {
+  font-size: 42px;
+  font-weight: 400;
+  letter-spacing: -1px;
+  margin-bottom: var(--spacing-xs);
+  background: linear-gradient(
+    135deg,
+    var(--color-text-primary) 0%,
+    var(--color-text-secondary) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-section p {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+     LAYOUT
+     ============================================ */
+
+.picker-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+/* ============================================
+     CARD (shared with Tool1 style)
+     ============================================ */
+
+.card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-header h3 {
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-content {
+  padding: var(--spacing-md);
+}
+
+/* ============================================
+     WHEEL CARD
+     ============================================ */
+
+.wheel-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.wheel-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.canvas-wrapper {
+  position: relative;
+  line-height: 0;
+}
+
+.color-canvas {
+  display: block;
+  border-radius: 50%;
+  transition: box-shadow 0.3s ease;
+}
+
+.color-canvas:hover {
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+
+/* ============================================
+     BRIGHTNESS SLIDER
+     ============================================ */
+
+.brightness-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.slider-label {
+  font-size: var(--font-size-tiny);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.slider-value {
+  font-size: var(--font-size-tiny);
+  color: var(--color-text-secondary);
+  min-width: 36px;
+  text-align: right;
+}
+
+.brightness-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    #1a1a1a,
+    var(--thumb-color, #4a9eff),
+    #ffffff
+  );
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.brightness-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-text-primary);
+  border: 2px solid var(--color-bg-secondary);
+  box-shadow: 0 0 0 1px var(--color-border);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.brightness-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.brightness-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-text-primary);
+  border: 2px solid var(--color-bg-secondary);
+  cursor: pointer;
+}
+
+/* ============================================
+     COLOR INFO CARD (right panel)
+     ============================================ */
+
+.info-card-right {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Preview box */
+.color-preview-box {
+  height: 90px;
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: flex-end;
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  transition: background-color 0.2s ease;
+  border: 1px solid var(--color-border);
+}
+
+.preview-label {
+  font-size: var(--font-size-tiny);
+  font-weight: 600;
+  font-family: "Courier New", monospace;
+  letter-spacing: 2px;
+  opacity: 0.85;
+}
+
+/* Color codes */
+.color-codes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.color-code-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--border-radius);
+}
+
+.code-label {
+  font-size: var(--font-size-tiny);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 32px;
+  font-weight: 600;
+}
+
+.code-input {
+  flex: 1;
+  font-size: var(--font-size-small);
+  font-family: "Courier New", monospace;
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  caret-color: var(--color-text-primary);
+}
+
+.code-value {
+  flex: 1;
+  font-size: var(--font-size-small);
+  font-family: "Courier New", monospace;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+     BUTTONS (matching Tool1 button styles)
+     ============================================ */
+
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-small);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--color-text-primary);
+  color: var(--color-bg-primary);
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+}
+
+.btn-secondary {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-text-secondary);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.btn-outline:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-secondary);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: none;
+  padding: 6px 10px;
+  font-size: var(--font-size-tiny);
+}
+
+.btn-ghost:hover {
+  color: var(--color-text-primary);
+}
+
+.copy-btn.copied {
+  color: #4caf7d;
+}
+
+.action-row {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+/* ============================================
+     HISTORY CARD
+     ============================================ */
+
+.history-card {
+  margin-bottom: var(--spacing-md);
+}
+
+.history-count {
+  font-size: var(--font-size-tiny);
+  color: var(--color-text-tertiary);
+}
+
+.history-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.swatch:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  border-color: transparent;
+}
+
+/* ============================================
+     INFO BOTTOM CARD (same as Tool1 info card)
+     ============================================ */
+
+.info-bottom-card {
+  margin-bottom: var(--spacing-md);
+}
+
+.info-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.info-list li {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-xs) 0;
+  border-bottom: 1px solid var(--color-border-light);
+  line-height: 1.6;
+}
+
+.info-list li:last-child {
+  border-bottom: none;
+}
+
+.info-list strong {
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+     IMAGE PICKER
+     ============================================ */
+
+.image-picker-card {
+  margin-bottom: var(--spacing-md);
+}
+
+.image-upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xl);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--color-bg-primary);
+}
+
+.image-upload-zone:hover {
+  border-color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+}
+
+.upload-icon {
+  font-size: 28px;
+  color: var(--color-text-tertiary);
+}
+
+.upload-text {
+  font-size: var(--font-size-small);
+  color: var(--color-text-primary);
+}
+
+.upload-hint {
+  font-size: var(--font-size-tiny);
+  color: var(--color-text-tertiary);
+}
+
+.image-picker-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.image-canvas-wrapper {
+  overflow: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  line-height: 0;
+}
+
+.image-canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.image-picked-result {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--border-radius);
+}
+
+.image-picked-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.image-picked-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px var(--spacing-sm);
+  flex: 1;
+  align-items: center;
+}
+
+.image-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+@media (max-width: 768px) {
+  .color-picker-container {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .picker-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .wheel-content {
+    align-items: center;
+  }
+
+  .action-row {
+    flex-direction: column;
+  }
+
+  .action-row .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .header-section h1 {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-section h1 {
+    font-size: 26px;
+  }
+}

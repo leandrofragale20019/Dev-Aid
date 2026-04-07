@@ -22,18 +22,16 @@ function Home() {
               <span className="tool-name">JSON formatter</span>
               <span className="tool-tag">Formatter</span>
             </div>
-            <p className="tool-description">
-              Problems with reading JSON ?
-            </p>
+            <p className="tool-description">Problems with reading JSON ?</p>
           </Link>
 
           <Link to="/tool2" className="tool-item">
             <div className="tool-header">
-              <span className="tool-name">Tool 2</span>
+              <span className="tool-name">Color Picker</span>
               <span className="tool-tag">Design</span>
             </div>
             <p className="tool-description">
-              Beschreibung des zweiten Tools
+              Problems finding the wright color ?
             </p>
           </Link>
 
@@ -42,9 +40,7 @@ function Home() {
               <span className="tool-name">Tool 3</span>
               <span className="tool-tag">Converter</span>
             </div>
-            <p className="tool-description">
-              Beschreibung des dritten Tools
-            </p>
+            <p className="tool-description">Beschreibung des dritten Tools</p>
           </Link>
         </div>
       </section>
@@ -56,8 +52,7 @@ function Home() {
         </div>
         <div className="stat">
           <div className="stat-number">00</div>
-          <div className="stat-label">
-          Registrations required</div>
+          <div className="stat-label">Registrations required</div>
         </div>
         <div className="stat">
           <div className="stat-number">∞</div>
