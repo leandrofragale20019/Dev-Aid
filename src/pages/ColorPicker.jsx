@@ -63,7 +63,6 @@ const ColorPicker = () => {
 
     ctx.clearRect(0, 0, WHEEL_SIZE, WHEEL_SIZE);
 
-    // Draw color wheel
     for (let angle = 0; angle < 360; angle += 1) {
       const startAngle = ((angle - 1) * Math.PI) / 180;
       const endAngle = ((angle + 1) * Math.PI) / 180;
@@ -90,14 +89,12 @@ const ColorPicker = () => {
       ctx.fill();
     }
 
-    // Punch out center
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
     ctx.arc(cx, cy, INNER_RADIUS, 0, Math.PI * 2);
     ctx.fill();
     ctx.globalCompositeOperation = "source-over";
 
-    // Draw center circle with selected color
     ctx.beginPath();
     ctx.arc(cx, cy, INNER_RADIUS - 2, 0, Math.PI * 2);
     ctx.fillStyle = hexColor;
@@ -106,7 +103,6 @@ const ColorPicker = () => {
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // Draw selector dot
     ctx.beginPath();
     ctx.arc(selectorPos.x, selectorPos.y, 10, 0, Math.PI * 2);
     ctx.strokeStyle = "white";
@@ -159,7 +155,6 @@ const ColorPicker = () => {
   );
 
   useEffect(() => {
-    // Set initial selector position
     const angle = (selectedColor.h * Math.PI) / 180;
     const dist = (selectedColor.s / 100) * (RADIUS - 2);
     const x = RADIUS + Math.cos(angle) * dist;
@@ -213,7 +208,6 @@ const ColorPicker = () => {
     setRgbColor(rgb);
     setHexColor(hex);
 
-    // Update selector position
     const angle = (h * Math.PI) / 180;
     const dist = (s / 100) * (RADIUS - 2);
     const x = RADIUS + Math.cos(angle) * dist;
@@ -232,9 +226,7 @@ const ColorPicker = () => {
     setHexColor(val);
     if (/^#[0-9a-fA-F]{6}$/.test(val)) {
       const rgb = hexToRgb(val);
-      if (rgb) {
-        setRgbColor(rgb);
-      }
+      if (rgb) setRgbColor(rgb);
     }
   };
 
@@ -247,11 +239,17 @@ const ColorPicker = () => {
     setRgbColor(rgb);
   };
 
-  // --- Image Picker ---
+  // ─── Image Eyedropper ────────────────────────────────────────────────────────
   const imageCanvasRef = useRef(null);
+  const magnifierCanvasRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imagePickedColor, setImagePickedColor] = useState(null);
-  const [isMagnifying, setIsMagnifying] = useState(false);
+  const [eyedropperActive, setEyedropperActive] = useState(false);
+  const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0 });
+  const [showMagnifier, setShowMagnifier] = useState(false);
+  const MAGNIFIER_SIZE = 120;
+  const MAGNIFIER_ZOOM = 5;
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -260,55 +258,151 @@ const ColorPicker = () => {
     reader.onload = (ev) => {
       const img = new Image();
       img.onload = () => {
-        const canvas = imageCanvasRef.current;
-        const maxW = 600,
-          maxH = 340;
-        let w = img.width,
-          h = img.height;
-        if (w > maxW) {
-          h = (h * maxW) / w;
-          w = maxW;
-        }
-        if (h > maxH) {
-          w = (w * maxH) / h;
-          h = maxH;
-        }
-        canvas.width = Math.round(w);
-        canvas.height = Math.round(h);
-        canvas
-          .getContext("2d")
-          .drawImage(img, 0, 0, canvas.width, canvas.height);
+        // 1. Zuerst den Status setzen!
+        // Das sorgt dafür, dass React das <canvas> Element im DOM rendert.
         setImageLoaded(true);
         setImagePickedColor(null);
+        setEyedropperActive(false);
+
+        // 2. Ein minimaler Timeout (0ms) verschiebt das Zeichnen in den nächsten "Event Loop".
+        // Bis dahin hat React das Canvas-Element tatsächlich erstellt.
+        setTimeout(() => {
+          const canvas = imageCanvasRef.current;
+          if (!canvas) return; // Sicherheitscheck
+
+          const ctx = canvas.getContext("2d");
+          const maxW = 600,
+            maxH = 340;
+          let w = img.width,
+            h = img.height;
+
+          if (w > maxW) {
+            h = (h * maxW) / w;
+            w = maxW;
+          }
+          if (h > maxH) {
+            w = (w * maxH) / h;
+            h = maxH;
+          }
+
+          canvas.width = Math.round(w);
+          canvas.height = Math.round(h);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }, 0);
       };
       img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   };
 
-  const handleImageClick = (e) => {
+  const drawMagnifier = (canvas, x, y) => {
+    const magCanvas = magnifierCanvasRef.current;
+    if (!magCanvas) return;
+    const magCtx = magCanvas.getContext("2d");
+    const half = MAGNIFIER_SIZE / 2;
+    const srcSize = MAGNIFIER_SIZE / MAGNIFIER_ZOOM;
+
+    magCtx.clearRect(0, 0, MAGNIFIER_SIZE, MAGNIFIER_SIZE);
+
+    // Clip to circle
+    magCtx.save();
+    magCtx.beginPath();
+    magCtx.arc(half, half, half - 2, 0, Math.PI * 2);
+    magCtx.clip();
+
+    magCtx.imageSmoothingEnabled = false;
+    magCtx.drawImage(
+      canvas,
+      x - srcSize / 2,
+      y - srcSize / 2,
+      srcSize,
+      srcSize,
+      0,
+      0,
+      MAGNIFIER_SIZE,
+      MAGNIFIER_SIZE
+    );
+
+    // Grid crosshair
+    magCtx.strokeStyle = "rgba(255,255,255,0.6)";
+    magCtx.lineWidth = 1;
+    magCtx.beginPath();
+    magCtx.moveTo(half, 0);
+    magCtx.lineTo(half, MAGNIFIER_SIZE);
+    magCtx.moveTo(0, half);
+    magCtx.lineTo(MAGNIFIER_SIZE, half);
+    magCtx.stroke();
+
+    magCtx.restore();
+
+    // Border
+    magCtx.beginPath();
+    magCtx.arc(half, half, half - 1, 0, Math.PI * 2);
+    magCtx.strokeStyle = "rgba(255,255,255,0.85)";
+    magCtx.lineWidth = 3;
+    magCtx.stroke();
+  };
+
+  const getCanvasCoords = (e) => {
     const canvas = imageCanvasRef.current;
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    const x = Math.floor((e.clientX - rect.left) * scaleX);
-    const y = Math.floor((e.clientY - rect.top) * scaleY);
+    return {
+      x: Math.floor((e.clientX - rect.left) * scaleX),
+      y: Math.floor((e.clientY - rect.top) * scaleY),
+      clientX: e.clientX,
+      clientY: e.clientY,
+    };
+  };
+
+  const handleImageMouseMove = (e) => {
+    if (!eyedropperActive || !imageLoaded) return;
+    const { x, y, clientX, clientY } = getCanvasCoords(e);
+    const canvas = imageCanvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+
+    setMagnifierPos({
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    });
+    setShowMagnifier(true);
+    drawMagnifier(canvas, x, y);
+
+    // Live preview the hovered color
+    const rgb = getColorAtPixel(canvas, x, y);
+    const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+    setImagePickedColor({ rgb, hex });
+  };
+
+  const handleImageClick = (e) => {
+    if (!eyedropperActive || !imageLoaded) return;
+    const { x, y } = getCanvasCoords(e);
+    const canvas = imageCanvasRef.current;
     const rgb = getColorAtPixel(canvas, x, y);
     const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
     setImagePickedColor({ rgb, hex });
     setHexColor(hex);
     setRgbColor(rgb);
+    setEyedropperActive(false);
+    setShowMagnifier(false);
   };
 
-  const applyImageColor = () => {
-    if (!imagePickedColor) return;
-    setHexColor(imagePickedColor.hex);
-    setRgbColor(imagePickedColor.rgb);
+  const handleImageMouseLeave = () => {
+    setShowMagnifier(false);
   };
 
   const luminance =
     (rgbColor.r * 0.299 + rgbColor.g * 0.587 + rgbColor.b * 0.114) / 255;
   const textOnColor = luminance > 0.55 ? "#000000" : "#ffffff";
+
+  const imgPickedLum = imagePickedColor
+    ? (imagePickedColor.rgb.r * 0.299 +
+        imagePickedColor.rgb.g * 0.587 +
+        imagePickedColor.rgb.b * 0.114) /
+      255
+    : 1;
+  const textOnPicked = imgPickedLum > 0.55 ? "#000000" : "#ffffff";
 
   return (
     <div className="color-picker-container">
@@ -362,7 +456,6 @@ const ColorPicker = () => {
             <h3>Color Values</h3>
           </div>
           <div className="card-content">
-            {/* Preview Box */}
             <div
               className="color-preview-box"
               style={{ backgroundColor: hexColor, color: textOnColor }}
@@ -370,7 +463,6 @@ const ColorPicker = () => {
               <span className="preview-label">{hexColor.toUpperCase()}</span>
             </div>
 
-            {/* Color codes */}
             <div className="color-codes">
               <div className="color-code-row">
                 <span className="code-label">HEX</span>
@@ -432,7 +524,6 @@ const ColorPicker = () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="action-row">
               <button onClick={randomColor} className="btn btn-primary">
                 Random
@@ -445,6 +536,165 @@ const ColorPicker = () => {
               </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* ── Image Eyedropper Card ─────────────────────────────────────────── */}
+      <div className="card image-picker-card">
+        <div className="card-header">
+          <h3>Image Eyedropper</h3>
+          <span className="card-subtitle">
+            Upload an image and pick any color directly from it
+          </span>
+        </div>
+        <div className="card-content">
+          {/* Upload area */}
+          {!imageLoaded ? (
+            <div
+              className="image-drop-zone"
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith("image/")) {
+                  const fakeEvent = { target: { files: [file] } };
+                  handleImageUpload(fakeEvent);
+                }
+              }}
+            >
+              <div className="drop-zone-icon">🖼️</div>
+              <p className="drop-zone-text">Click or drag an image here</p>
+              <p className="drop-zone-hint">PNG, JPG, WEBP, GIF …</p>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleImageUpload}
+              />
+            </div>
+          ) : (
+            <div className="image-picker-layout">
+              {/* Canvas wrapper with magnifier */}
+              <div
+                className="image-canvas-wrapper"
+                style={{ position: "relative", display: "inline-block" }}
+              >
+                <canvas
+                  ref={imageCanvasRef}
+                  className="image-canvas"
+                  style={{
+                    cursor: eyedropperActive ? "none" : "default",
+                    borderRadius: "8px",
+                    display: "block",
+                    maxWidth: "100%",
+                  }}
+                  onMouseMove={handleImageMouseMove}
+                  onMouseLeave={handleImageMouseLeave}
+                  onClick={handleImageClick}
+                />
+
+                {/* Magnifier lens */}
+                {eyedropperActive && showMagnifier && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: magnifierPos.x + 16,
+                      top: magnifierPos.y - MAGNIFIER_SIZE / 2,
+                      pointerEvents: "none",
+                      zIndex: 10,
+                      filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.5))",
+                    }}
+                  >
+                    <canvas
+                      ref={magnifierCanvasRef}
+                      width={MAGNIFIER_SIZE}
+                      height={MAGNIFIER_SIZE}
+                    />
+                    {/* Color label below magnifier */}
+                    {imagePickedColor && (
+                      <div
+                        style={{
+                          marginTop: 4,
+                          background: imagePickedColor.hex,
+                          color: textOnPicked,
+                          borderRadius: 6,
+                          padding: "2px 8px",
+                          fontSize: 12,
+                          fontFamily: "monospace",
+                          textAlign: "center",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+                        }}
+                      >
+                        {imagePickedColor.hex.toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Controls beside canvas */}
+              <div className="image-picker-controls">
+                <button
+                  className={`btn ${
+                    eyedropperActive ? "btn-primary" : "btn-secondary"
+                  } eyedropper-btn`}
+                  onClick={() => {
+                    setEyedropperActive((v) => !v);
+                    setShowMagnifier(false);
+                  }}
+                  title="Pipette aktivieren"
+                >
+                  <span style={{ fontSize: 18 }}>🔬</span>
+                  {eyedropperActive
+                    ? "Pipette aktiv – klicken zum Aufnehmen"
+                    : "Pipette aktivieren"}
+                </button>
+
+                {imagePickedColor && (
+                  <div className="picked-color-preview">
+                    <div
+                      className="picked-swatch"
+                      style={{ backgroundColor: imagePickedColor.hex }}
+                    />
+                    <div className="picked-color-info">
+                      <span className="picked-hex">
+                        {imagePickedColor.hex.toUpperCase()}
+                      </span>
+                      <span className="picked-rgb">
+                        rgb({imagePickedColor.rgb.r}, {imagePickedColor.rgb.g},{" "}
+                        {imagePickedColor.rgb.b})
+                      </span>
+                    </div>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        setHexColor(imagePickedColor.hex);
+                        setRgbColor(imagePickedColor.rgb);
+                        addToHistory();
+                      }}
+                    >
+                      Übernehmen &amp; Speichern
+                    </button>
+                  </div>
+                )}
+
+                <button
+                  className="btn btn-outline"
+                  style={{ marginTop: "auto" }}
+                  onClick={() => {
+                    setImageLoaded(false);
+                    setImagePickedColor(null);
+                    setEyedropperActive(false);
+                    if (fileInputRef.current) fileInputRef.current.value = "";
+                  }}
+                >
+                  Anderes Bild laden
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -494,6 +744,10 @@ const ColorPicker = () => {
             </li>
             <li>
               <strong>Save Color:</strong> Add the current color to your history
+            </li>
+            <li>
+              <strong>Image Eyedropper:</strong> Upload any image, activate the
+              pipette and click on any pixel to extract its exact color
             </li>
           </ul>
         </div>

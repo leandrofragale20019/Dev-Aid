@@ -12,8 +12,8 @@
 }
 
 /* ============================================
-     HEADER SECTION
-     ============================================ */
+       HEADER SECTION
+       ============================================ */
 
 .header-section {
   margin-bottom: var(--spacing-xl);
@@ -40,8 +40,8 @@
 }
 
 /* ============================================
-     LAYOUT
-     ============================================ */
+       LAYOUT
+       ============================================ */
 
 .picker-layout {
   display: grid;
@@ -51,8 +51,8 @@
 }
 
 /* ============================================
-     CARD (shared with Tool1 style)
-     ============================================ */
+       CARD (shared with Tool1 style)
+       ============================================ */
 
 .card {
   background: var(--color-bg-secondary);
@@ -67,6 +67,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--spacing-sm);
 }
 
 .card-header h3 {
@@ -77,13 +78,18 @@
   letter-spacing: 0.5px;
 }
 
+.card-subtitle {
+  font-size: var(--font-size-tiny);
+  color: var(--color-text-tertiary);
+}
+
 .card-content {
   padding: var(--spacing-md);
 }
 
 /* ============================================
-     WHEEL CARD
-     ============================================ */
+       WHEEL CARD
+       ============================================ */
 
 .wheel-card {
   display: flex;
@@ -113,8 +119,8 @@
 }
 
 /* ============================================
-     BRIGHTNESS SLIDER
-     ============================================ */
+       BRIGHTNESS SLIDER
+       ============================================ */
 
 .brightness-row {
   display: flex;
@@ -180,15 +186,14 @@
 }
 
 /* ============================================
-     COLOR INFO CARD (right panel)
-     ============================================ */
+       COLOR INFO CARD (right panel)
+       ============================================ */
 
 .info-card-right {
   display: flex;
   flex-direction: column;
 }
 
-/* Preview box */
 .color-preview-box {
   height: 90px;
   border-radius: var(--border-radius);
@@ -208,7 +213,6 @@
   opacity: 0.85;
 }
 
-/* Color codes */
 .color-codes {
   display: flex;
   flex-direction: column;
@@ -257,8 +261,8 @@
 }
 
 /* ============================================
-     BUTTONS (matching Tool1 button styles)
-     ============================================ */
+       BUTTONS
+       ============================================ */
 
 .btn {
   padding: 8px 16px;
@@ -324,8 +328,8 @@
 }
 
 /* ============================================
-     HISTORY CARD
-     ============================================ */
+       HISTORY CARD
+       ============================================ */
 
 .history-card {
   margin-bottom: var(--spacing-md);
@@ -359,8 +363,8 @@
 }
 
 /* ============================================
-     INFO BOTTOM CARD (same as Tool1 info card)
-     ============================================ */
+       INFO BOTTOM CARD
+       ============================================ */
 
 .info-bottom-card {
   margin-bottom: var(--spacing-md);
@@ -390,14 +394,15 @@
 }
 
 /* ============================================
-     IMAGE PICKER
-     ============================================ */
+       IMAGE EYEDROPPER CARD
+       ============================================ */
 
 .image-picker-card {
   margin-bottom: var(--spacing-md);
 }
 
-.image-upload-zone {
+/* Drop zone (no image loaded yet) */
+.image-drop-zone {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -407,41 +412,48 @@
   border: 1px dashed var(--color-border);
   border-radius: var(--border-radius);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease;
   background: var(--color-bg-primary);
 }
 
-.image-upload-zone:hover {
+.image-drop-zone:hover {
   border-color: var(--color-text-secondary);
   background: var(--color-bg-secondary);
 }
 
-.upload-icon {
+.drop-zone-icon {
   font-size: 28px;
   color: var(--color-text-tertiary);
+  line-height: 1;
 }
 
-.upload-text {
+.drop-zone-text {
   font-size: var(--font-size-small);
   color: var(--color-text-primary);
+  margin: 0;
 }
 
-.upload-hint {
+.drop-zone-hint {
   font-size: var(--font-size-tiny);
   color: var(--color-text-tertiary);
+  margin: 0;
 }
 
-.image-picker-area {
+/* Image loaded: canvas + controls side by side */
+.image-picker-layout {
   display: flex;
-  flex-direction: column;
   gap: var(--spacing-md);
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .image-canvas-wrapper {
-  overflow: auto;
+  flex: 1 1 auto;
+  position: relative;
+  line-height: 0;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
-  line-height: 0;
+  overflow: hidden;
 }
 
 .image-canvas {
@@ -450,36 +462,71 @@
   height: auto;
 }
 
-.image-picked-result {
+/* Controls column */
+.image-picker-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  flex: 0 0 220px;
+  min-width: 180px;
+}
+
+/* Eyedropper toggle */
+.eyedropper-btn {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
+  white-space: normal;
+  text-align: left;
+  line-height: 1.35;
+}
+
+.eyedropper-btn span {
+  flex-shrink: 0;
+}
+
+/* Picked color preview panel */
+.picked-color-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
   padding: var(--spacing-sm);
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border-light);
   border-radius: var(--border-radius);
 }
 
-.image-picked-swatch {
-  width: 40px;
-  height: 40px;
+.picked-swatch {
+  width: 100%;
+  height: 52px;
   border-radius: var(--border-radius);
   border: 1px solid var(--color-border);
-  flex-shrink: 0;
+  transition: background-color 0.15s ease;
 }
 
-.image-picked-info {
+.picked-color-info {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px var(--spacing-sm);
-  flex: 1;
-  align-items: center;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.image-actions {
-  display: flex;
-  gap: var(--spacing-xs);
+.picked-hex {
+  font-family: "Courier New", monospace;
+  font-size: var(--font-size-small);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: 1px;
 }
+
+.picked-rgb {
+  font-family: "Courier New", monospace;
+  font-size: var(--font-size-tiny);
+  color: var(--color-text-tertiary);
+}
+
+/* ============================================
+       RESPONSIVE
+       ============================================ */
 
 @media (max-width: 768px) {
   .color-picker-container {
@@ -505,6 +552,10 @@
 
   .header-section h1 {
     font-size: 32px;
+  }
+
+  .image-picker-controls {
+    flex: 1 1 100%;
   }
 }
 
