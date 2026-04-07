@@ -10,7 +10,7 @@ function Home() {
       <Header />
 
       <section className="hero">
-        <h1>Deine Dev-Tools.</h1>
+        <h1>Your Dev-Tools.</h1>
         <p>Open source toolbox for programming</p>
       </section>
 
