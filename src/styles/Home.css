@@ -181,6 +181,7 @@ body::before {
     font-weight: 400;
     color: var(--color-text-primary);
     transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-left: 10px;
 }
 
 .tool-item:hover .tool-name {
@@ -198,6 +199,7 @@ body::before {
     white-space: nowrap;
     background: var(--color-bg-primary);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-right: 10px;
 }
 
 .tool-item:hover .tool-tag {
@@ -209,6 +211,7 @@ body::before {
     font-size: var(--font-size-small);
     color: var(--color-text-secondary);
     line-height: 1.6;
+    margin-left: 10px;
 }
 
 
