@@ -246,7 +246,6 @@ body::before {
     background-color: var(--color-bg-primary);
     border-color: var(--color-accent);
     color: var(--color-accent);
-    transform: translateY(-2px);
     box-shadow: var(--shadow-sm);
 }
 
