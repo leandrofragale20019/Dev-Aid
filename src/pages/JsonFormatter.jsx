@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import '../styles/Tool1.css';
+import '../styles/JsonFormatter.css';
 
 const Tool1 = () => {
   const [input, setInput] = useState('');

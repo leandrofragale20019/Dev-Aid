@@ -55,6 +55,7 @@ body {
     line-height: 1.6;
     font-size: var(--font-size-base);
     transition: background-color 0.3s ease, color 0.3s ease;
+    padding-top: 70px;
 }
 
 /* ============================================
@@ -72,10 +73,16 @@ body {
     .container {
         padding: var(--spacing-lg) var(--spacing-md);
     }
+    body {
+        padding-top: 120px;
+    }
 }
 
 @media (max-width: 480px) {
     .container {
         padding: var(--spacing-md) var(--spacing-sm);
+    }
+    body {
+        padding-top: 140px;
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import "../styles/Tool2.css";
+import "../styles/ColorPicker.css";
 
 // Helper: pick color from image canvas
 const getColorAtPixel = (canvas, x, y) => {
