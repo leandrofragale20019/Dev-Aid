@@ -17,7 +17,7 @@ function Home() {
       <section className="tools-section">
         <h2 className="section-title">Tool-Overview</h2>
         <div className="tools-list">
-          <Link to="/tool1" className="tool-item">
+          <Link to="/jsonFormatter" className="tool-item">
             <div className="tool-header">
               <span className="tool-name">JSON formatter</span>
               <span className="tool-tag">Formatter</span>
@@ -25,7 +25,7 @@ function Home() {
             <p className="tool-description">Problems with reading JSON ?</p>
           </Link>
 
-          <Link to="/tool2" className="tool-item">
+          <Link to="/colorPicker" className="tool-item">
             <div className="tool-header">
               <span className="tool-name">Color Picker</span>
               <span className="tool-tag">Design</span>
