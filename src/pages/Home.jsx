@@ -31,7 +31,7 @@ function Home() {
               <span className="tool-tag">Design</span>
             </div>
             <p className="tool-description">
-              Problems finding the wright color ?
+              Problems finding the right color ?
             </p>
           </Link>
 
