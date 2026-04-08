@@ -68,7 +68,6 @@ const Tool1 = () => {
       </div>
 
       <div className="grid-layout">
-        {/* Input Bereich */}
         <div className="card">
           <div className="card-header">
             <h3>input</h3>
@@ -94,7 +93,6 @@ const Tool1 = () => {
           </div>
         </div>
 
-        {/* Output Bereich */}
         <div className="card">
           <div className="card-header">
             <h3>output</h3>
@@ -127,7 +125,6 @@ const Tool1 = () => {
         </div>
       </div>
 
-      {/* Info Bereich */}
       <div className="card info-card">
         <div className="card-header">
           <h3>functions</h3>

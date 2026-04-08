@@ -3,7 +3,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import '../styles/tools/ColorPicker.css';
 
-// Helper: pick color from image canvas
 const getColorAtPixel = (canvas, x, y) => {
   const ctx = canvas.getContext("2d");
   const p = ctx.getImageData(x, y, 1, 1).data;
@@ -239,7 +238,6 @@ const ColorPicker = () => {
     setRgbColor(rgb);
   };
 
-  // ─── Image Eyedropper ────────────────────────────────────────────────────────
   const imageCanvasRef = useRef(null);
   const magnifierCanvasRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -258,17 +256,13 @@ const ColorPicker = () => {
     reader.onload = (ev) => {
       const img = new Image();
       img.onload = () => {
-        // 1. Zuerst den Status setzen!
-        // Das sorgt dafür, dass React das <canvas> Element im DOM rendert.
         setImageLoaded(true);
         setImagePickedColor(null);
         setEyedropperActive(false);
 
-        // 2. Ein minimaler Timeout (0ms) verschiebt das Zeichnen in den nächsten "Event Loop".
-        // Bis dahin hat React das Canvas-Element tatsächlich erstellt.
         setTimeout(() => {
           const canvas = imageCanvasRef.current;
-          if (!canvas) return; // Sicherheitscheck
+          if (!canvas) return; 
 
           const ctx = canvas.getContext("2d");
           const maxW = 600,
@@ -304,7 +298,6 @@ const ColorPicker = () => {
 
     magCtx.clearRect(0, 0, MAGNIFIER_SIZE, MAGNIFIER_SIZE);
 
-    // Clip to circle
     magCtx.save();
     magCtx.beginPath();
     magCtx.arc(half, half, half - 2, 0, Math.PI * 2);
@@ -369,7 +362,6 @@ const ColorPicker = () => {
     setShowMagnifier(true);
     drawMagnifier(canvas, x, y);
 
-    // Live preview the hovered color
     const rgb = getColorAtPixel(canvas, x, y);
     const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
     setImagePickedColor({ rgb, hex });
@@ -414,7 +406,6 @@ const ColorPicker = () => {
       </div>
 
       <div className="picker-layout">
-        {/* Wheel + Preview */}
         <div className="card wheel-card">
           <div className="card-header">
             <h3>Color Wheel</h3>
@@ -450,7 +441,6 @@ const ColorPicker = () => {
           </div>
         </div>
 
-        {/* Color Info */}
         <div className="card info-card-right">
           <div className="card-header">
             <h3>Color Values</h3>
@@ -539,7 +529,6 @@ const ColorPicker = () => {
         </div>
       </div>
 
-      {/* ── Image Eyedropper Card ─────────────────────────────────────────── */}
       <div className="card image-picker-card">
         <div className="card-header">
           <h3>Image Eyedropper</h3>
@@ -548,7 +537,6 @@ const ColorPicker = () => {
           </span>
         </div>
         <div className="card-content">
-          {/* Upload area */}
           {!imageLoaded ? (
             <div
               className="image-drop-zone"
@@ -576,7 +564,6 @@ const ColorPicker = () => {
             </div>
           ) : (
             <div className="image-picker-layout">
-              {/* Canvas wrapper with magnifier */}
               <div
                 className="image-canvas-wrapper"
                 style={{ position: "relative", display: "inline-block" }}
@@ -595,7 +582,6 @@ const ColorPicker = () => {
                   onClick={handleImageClick}
                 />
 
-                {/* Magnifier lens */}
                 {eyedropperActive && showMagnifier && (
                   <div
                     style={{
@@ -612,7 +598,6 @@ const ColorPicker = () => {
                       width={MAGNIFIER_SIZE}
                       height={MAGNIFIER_SIZE}
                     />
-                    {/* Color label below magnifier */}
                     {imagePickedColor && (
                       <div
                         style={{
@@ -634,7 +619,6 @@ const ColorPicker = () => {
                 )}
               </div>
 
-              {/* Controls beside canvas */}
               <div className="image-picker-controls">
                 <button
                   className={`btn ${
@@ -698,7 +682,6 @@ const ColorPicker = () => {
         </div>
       </div>
 
-      {/* History */}
       {colorHistory.length > 0 && (
         <div className="card history-card">
           <div className="card-header">
@@ -721,7 +704,6 @@ const ColorPicker = () => {
         </div>
       )}
 
-      {/* Info Section */}
       <div className="card info-bottom-card">
         <div className="card-header">
           <h3>functions</h3>

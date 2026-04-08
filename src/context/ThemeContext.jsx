@@ -6,7 +6,6 @@ export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
-    // Theme beim Laden aus localStorage holen
     const savedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -26,7 +25,6 @@ export function ThemeProvider({ children }) {
   );
 }
 
-// Custom Hook für einfachen Zugriff
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
