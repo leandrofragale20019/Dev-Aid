@@ -250,7 +250,7 @@ body::before {
     width: 50%;
 }
 
-.stat-number {
+.stat-content {
     font-size: 36px;
     font-weight: 400;
     margin-bottom: var(--spacing-sm);
@@ -258,7 +258,7 @@ body::before {
     transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.stat:hover .stat-number {
+.stat:hover .stat-content {
     color: var(--color-accent);
 }
 
@@ -324,7 +324,7 @@ body::before {
         font-size: 16px;
     }
 
-    .stat-number {
+    .stat-content {
         font-size: 28px;
     }
 }

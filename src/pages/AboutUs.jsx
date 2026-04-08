@@ -56,15 +56,15 @@ function AboutUs() {
         <h2 className="section-title">The Team</h2>
         <div className="stats">
           <div className="stat">
-            <div className="stat-number">Leandro</div>
+            <div className="stat-content">Leandro</div>
             <div className="stat-label">Software Engineer</div>
           </div>
           <div className="stat">
-            <div className="stat-number">Damian</div>
+            <div className="stat-content">Damian</div>
             <div className="stat-label">Software Engineer</div>
           </div>
           <div className="stat">
-            <div className="stat-number">CH</div>
+            <div className="stat-content">CH</div>
             <div className="stat-label">Based in Switzerland</div>
           </div>
         </div>

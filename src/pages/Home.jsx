@@ -45,15 +45,15 @@ function Home() {
 
       <section className="stats">
         <div className="stat">
-          <div className="stat-number">03</div>
+          <div className="stat-content">03</div>
           <div className="stat-label">Tools available</div>
         </div>
         <div className="stat">
-          <div className="stat-number">00</div>
+          <div className="stat-content">00</div>
           <div className="stat-label">Registrations required</div>
         </div>
         <div className="stat">
-          <div className="stat-number">∞</div>
+          <div className="stat-content">∞</div>
           <div className="stat-label">for ever free</div>
         </div>
       </section>
