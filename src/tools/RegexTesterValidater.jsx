@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import "../styles/RegexTesterValidater.css";
+import '../styles/tools/RegexTesterValidater.css';
 
 const RegexTester = () => {
   const [regex, setRegex] = useState("[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}");
