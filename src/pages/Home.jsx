@@ -35,12 +35,12 @@ function Home() {
             </p>
           </Link>
 
-          <Link to="/tool3" className="tool-item">
+          <Link to="/regex" className="tool-item">
             <div className="tool-header">
-              <span className="tool-name">Tool 3</span>
-              <span className="tool-tag">Converter</span>
+              <span className="tool-name">Regex Tester & Validater</span>
+              <span className="tool-tag">Validater</span>
             </div>
-            <p className="tool-description">Beschreibung des dritten Tools</p>
+            <p className="tool-description">Problems with Regex?</p>
           </Link>
         </div>
       </section>
