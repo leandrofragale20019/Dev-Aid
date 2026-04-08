@@ -70,6 +70,8 @@ function AboutUs() {
         </div>
       </section>
 
+
+      {/* Status Section */}
       <section
         className="hero"
         style={{ marginTop: "var(--spacing-xl)", textAlign: "center" }}

@@ -3,9 +3,10 @@ import { ThemeProvider } from "./context/ThemeContext";
 import Home from "./pages/Home";
 import JsonFormatter from "./tools/JsonFormatter";
 import ColorPicker from "./tools/ColorPicker";
-import Tool3 from "./tools/Tool3";
-import AboutUs from "./pages/AboutUs";
+import RegexTesterValidater from "./tools/RegexTesterValidater"; 
+import AboutUs from "./pages/AboutUs";          
 import "./App.css";
+
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/jsonFormatter" element={<JsonFormatter />} />
         <Route path="/colorPicker" element={<ColorPicker />} />
-        <Route path="/tool3" element={<Tool3 />} />
+        <Route path="/regex" element={<RegexTesterValidater />} />
         <Route path="/about" element={<AboutUs />} />
       </Routes>
     </ThemeProvider>
