@@ -194,72 +194,7 @@
   white-space: nowrap;
 }
 
-/* ============================================
-   BUTTONS
-   ============================================ */
 
-.btn {
-  padding: 8px 16px;
-  border-radius: var(--border-radius);
-  font-size: var(--font-size-small);
-  font-family: var(--font-sans);
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.btn-primary {
-  background: var(--color-text-primary);
-  color: var(--color-bg-primary);
-}
-
-.btn-primary:hover {
-  opacity: 0.85;
-}
-
-.btn-secondary {
-  background: var(--color-bg-primary);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
-}
-
-.btn-secondary:hover {
-  border-color: var(--color-text-secondary);
-}
-
-.btn-outline {
-  background: transparent;
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border);
-}
-
-.btn-outline:hover {
-  color: var(--color-text-primary);
-  border-color: var(--color-text-secondary);
-}
-
-.btn-ghost {
-  background: transparent;
-  color: var(--color-text-secondary);
-  border: none;
-  padding: 6px 10px;
-  font-size: var(--font-size-tiny);
-}
-
-.btn-ghost:hover {
-  color: var(--color-text-primary);
-}
-
-.copy-btn.copied {
-  color: #4caf7d;
-}
-
-.action-row {
-  display: flex;
-  gap: var(--spacing-xs);
-  flex-wrap: wrap;
-}
 
 /* ============================================
    HISTORY CARD
@@ -443,15 +378,6 @@
 
   .wheel-content {
     align-items: center;
-  }
-
-  .action-row {
-    flex-direction: column;
-  }
-
-  .action-row .btn {
-    width: 100%;
-    text-align: center;
   }
 
   .image-picker-controls {
