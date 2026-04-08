@@ -1,15 +1,12 @@
 import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import "../styles/global.css";
-import "../styles/Home.css";
 
 function AboutUs() {
   return (
     <div className="container">
       <Header />
 
-      {/* Hero Section */}
       <section className="hero">
         <h1>About dev-aid</h1>
         <p>
@@ -20,44 +17,42 @@ function AboutUs() {
         </p>
       </section>
 
-      {/* Mission Section */}
-      <section className="tools-section">
+      <section className="content-section">
         <h2 className="section-title">Our Mission</h2>
-        <div className="tools-list">
-          <div className="tool-item">
-            <div className="tool-header">
-              <span className="tool-name">Developer First</span>
-              <span className="tool-tag">Focus</span>
+        <div className="content-list">
+          <div className="content-item">
+            <div className="content-item-header">
+              <span className="content-item-title">Developer First</span>
+              <span className="content-item-tag">Focus</span>
             </div>
-            <p className="tool-description">
+            <p className="content-item-desc">
               We build tools by developers, for developers.
             </p>
           </div>
 
-          <div className="tool-item">
-            <div className="tool-header">
-              <span className="tool-name">Open Source</span>
-              <span className="tool-tag">Community</span>
+          <div className="content-item">
+            <div className="content-item-header">
+              <span className="content-item-title">Open Source</span>
+              <span className="content-item-tag">Community</span>
             </div>
-            <p className="tool-description">
+            <p className="content-item-desc">
               We believe in sharing knowledge and the power of the community.
             </p>
           </div>
 
-          <div className="tool-item">
-            <div className="tool-header">
-              <span className="tool-name">Efficiency</span>
-              <span className="tool-tag">Solutions</span>
+          <div className="content-item">
+            <div className="content-item-header">
+              <span className="content-item-title">Efficiency</span>
+              <span className="content-item-tag">Solutions</span>
             </div>
-            <p className="tool-description">
+            <p className="content-item-desc">
               Turning complex workflows into elegant and simple solutions.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="tools-section">
+      <section className="content-section">
         <h2 className="section-title">The Team</h2>
         <div className="stats">
           <div className="stat">
@@ -75,7 +70,6 @@ function AboutUs() {
         </div>
       </section>
 
-      {/* Status Section */}
       <section
         className="hero"
         style={{ marginTop: "var(--spacing-xl)", textAlign: "center" }}

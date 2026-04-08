@@ -1,3 +1,7 @@
+/* ============================================
+   GLOBAL
+   ============================================ */
+
 * {
     margin: 0;
     padding: 0;
@@ -27,6 +31,9 @@
     --color-text-tertiary: #808080;
     --color-border: #333333;
     --color-border-light: #2a2a2a;
+    --color-accent: #4a9eff;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 /* Light Mode */
@@ -38,6 +45,9 @@
     --color-text-tertiary: #999999;
     --color-border: #e0e0e0;
     --color-border-light: #f0f0f0;
+    --color-accent: #0066cc;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 /* ============================================
@@ -56,6 +66,22 @@ body {
     font-size: var(--font-size-base);
     transition: background-color 0.3s ease, color 0.3s ease;
     padding-top: 70px;
+    position: relative;
+}
+
+body::before {
+    content: 'DEV TOOLS';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 120px;
+    font-weight: 900;
+    color: var(--color-border-light);
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 0;
+    letter-spacing: 20px;
 }
 
 /* ============================================
@@ -66,15 +92,213 @@ body {
     max-width: 900px;
     margin: 0 auto;
     padding: var(--spacing-xl) var(--spacing-lg);
+    position: relative;
+    z-index: 1;
 }
 
-/* Responsive für Container */
+/* ============================================
+   HERO
+   ============================================ */
+
+.hero {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.hero h1 {
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: -1px;
+    color: var(--color-text-primary);
+    background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero p {
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ============================================
+   CONTENT LIST
+   ============================================ */
+
+.content-section {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.section-title {
+    font-size: var(--font-size-tiny);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.content-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-border-light);
+}
+
+.content-item {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-lg) 0;
+    border-bottom: 1px solid var(--color-border-light);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    position: relative;
+}
+
+.content-item:hover {
+    background: var(--color-bg-secondary);
+    padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.content-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.content-item-title {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--color-text-primary);
+    transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-left: 10px;
+}
+
+.content-item:hover .content-item-title {
+    color: var(--color-accent);
+}
+
+.content-item-tag {
+    font-size: var(--font-size-tiny);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    padding: 4px 10px;
+    border-radius: var(--border-radius);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    background: var(--color-bg-primary);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-right: 10px;
+}
+
+.content-item:hover .content-item-tag {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.content-item-desc {
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-left: 10px;
+}
+
+/* ============================================
+   STATS
+   ============================================ */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+    margin: var(--spacing-xxl) 0;
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid var(--color-border-light);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.stat {
+    text-align: center;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.stat::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--color-accent);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat:hover {
+    background: var(--color-bg-secondary);
+}
+
+.stat:hover::after {
+    width: 50%;
+}
+
+.stat-number {
+    font-size: 36px;
+    font-weight: 400;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-primary);
+    transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat:hover .stat-number {
+    color: var(--color-accent);
+}
+
+.stat-label {
+    font-size: var(--font-size-tiny);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 768px) {
     .container {
         padding: var(--spacing-lg) var(--spacing-md);
     }
+
     body {
         padding-top: 120px;
+    }
+
+    body::before {
+        font-size: 80px;
+    }
+
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    .content-item:hover {
+        padding: var(--spacing-lg) 0;
+        margin: 0;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+        margin: var(--spacing-xl) 0;
     }
 }
 
@@ -82,7 +306,25 @@ body {
     .container {
         padding: var(--spacing-md) var(--spacing-sm);
     }
+
     body {
         padding-top: 140px;
+    }
+
+    body::before {
+        font-size: 50px;
+        letter-spacing: 10px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .content-item-title {
+        font-size: 16px;
+    }
+
+    .stat-number {
+        font-size: 28px;
     }
 }

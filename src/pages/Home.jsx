@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import "../styles/global.css";
-import "../styles/Home.css";
 
 function Home() {
   return (
@@ -14,33 +12,33 @@ function Home() {
         <p>Open source toolbox for programming</p>
       </section>
 
-      <section className="tools-section">
+      <section className="content-section">
         <h2 className="section-title">Tool-Overview</h2>
-        <div className="tools-list">
-          <Link to="/jsonFormatter" className="tool-item">
-            <div className="tool-header">
-              <span className="tool-name">JSON formatter</span>
-              <span className="tool-tag">Formatter</span>
+        <div className="content-list">
+          <Link to="/jsonFormatter" className="content-item">
+            <div className="content-item-header">
+              <span className="content-item-title">JSON formatter</span>
+              <span className="content-item-tag">Formatter</span>
             </div>
-            <p className="tool-description">Problems with reading JSON ?</p>
+            <p className="content-item-desc">Problems with reading JSON ?</p>
           </Link>
 
-          <Link to="/colorPicker" className="tool-item">
-            <div className="tool-header">
-              <span className="tool-name">Color Picker</span>
-              <span className="tool-tag">Design</span>
+          <Link to="/colorPicker" className="content-item">
+            <div className="content-item-header">
+              <span className="content-item-title">Color Picker</span>
+              <span className="content-item-tag">Design</span>
             </div>
-            <p className="tool-description">
+            <p className="content-item-desc">
               Problems finding the right color ?
             </p>
           </Link>
 
-          <Link to="/tool3" className="tool-item">
-            <div className="tool-header">
-              <span className="tool-name">Tool 3</span>
-              <span className="tool-tag">Converter</span>
+          <Link to="/tool3" className="content-item">
+            <div className="content-item-header">
+              <span className="content-item-title">Tool 3</span>
+              <span className="content-item-tag">Converter</span>
             </div>
-            <p className="tool-description">Beschreibung des dritten Tools</p>
+            <p className="content-item-desc">Beschreibung des dritten Tools</p>
           </Link>
         </div>
       </section>

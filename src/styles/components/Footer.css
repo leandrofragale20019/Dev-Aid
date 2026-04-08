@@ -1,3 +1,7 @@
+/* ============================================
+   FOOTER
+   ============================================ */
+
 footer {
     display: flex;
     justify-content: space-between;
@@ -23,7 +27,10 @@ footer {
     color: var(--color-text-primary);
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 768px) {
     footer {
         flex-direction: column;

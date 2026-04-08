@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import Home from "./pages/Home";
-import JsonFormatter from "./pages/JsonFormatter";
-import ColorPicker from "./pages/ColorPicker";
-import Tool3 from "./pages/Tool3";
+import JsonFormatter from "./tools/JsonFormatter";
+import ColorPicker from "./tools/ColorPicker";
+import Tool3 from "./tools/Tool3";
 import AboutUs from "./pages/AboutUs";
 import "./App.css";
 
