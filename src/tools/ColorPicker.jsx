@@ -244,7 +244,7 @@ const ColorPicker = () => {
   const imageDataRef = useRef(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imagePickedColor, setImagePickedColor] = useState(null);
-  const [eyedropperActive, setEyedropperActive] = useState(false);
+  const [eyedropperActive, setEyedropperActive] = useState(true);
   const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0 });
   const [showMagnifier, setShowMagnifier] = useState(false);
   const [imageDimensions, setImageDimensions] = useState({ w: 0, h: 0 });
@@ -286,7 +286,6 @@ const ColorPicker = () => {
         setImageDimensions({ w, h });
         setImageLoaded(true);
         setImagePickedColor(null);
-        setEyedropperActive(false);
       };
       
       img.onerror = () => {
@@ -429,7 +428,6 @@ const ColorPicker = () => {
     setImagePickedColor({ rgb, hex });
     setHexColor(hex);
     setRgbColor(rgb);
-    setEyedropperActive(false);
     setShowMagnifier(false);
   }, [eyedropperActive, imageLoaded, getCanvasCoords]);
 
@@ -680,8 +678,8 @@ const ColorPicker = () => {
                           background: imagePickedColor.hex,
                           color: textOnPicked,
                           borderRadius: 6,
-                          padding: "2px 8px",
-                          fontSize: 12,
+                          padding: "10px 2px",
+                          fontSize: 14,
                           fontFamily: "monospace",
                           textAlign: "center",
                           boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
@@ -695,21 +693,9 @@ const ColorPicker = () => {
               </div>
 
               <div className="image-picker-controls">
-                <button
-                  className={`btn ${
-                    eyedropperActive ? "btn-primary" : "btn-secondary"
-                  } eyedropper-btn`}
-                  onClick={() => {
-                    setEyedropperActive((v) => !v);
-                    setShowMagnifier(false);
-                  }}
-                  title="Activate Eyedropper"
-                >
-                  {eyedropperActive
-                    ? "Eyedropper activated – click on the picture to pick colour"
-                    : "Activate Eyedropper"}
-                </button>
-
+                <p className="eyedropper-hint">
+                  Click anywhere on the image to pick a colour
+                </p>
                 {imagePickedColor && (
                   <div className="picked-color-preview">
                     <div
@@ -734,7 +720,6 @@ const ColorPicker = () => {
                   onClick={() => {
                     setImageLoaded(false);
                     setImagePickedColor(null);
-                    setEyedropperActive(false);
                     imageDataRef.current = null;
                     if (fileInputRef.current) fileInputRef.current.value = "";
                   }}
