@@ -241,11 +241,13 @@ const ColorPicker = () => {
   const imageCanvasRef = useRef(null);
   const magnifierCanvasRef = useRef(null);
   const fileInputRef = useRef(null);
+  const imageDataRef = useRef(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imagePickedColor, setImagePickedColor] = useState(null);
   const [eyedropperActive, setEyedropperActive] = useState(false);
   const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0 });
   const [showMagnifier, setShowMagnifier] = useState(false);
+  const [imageDimensions, setImageDimensions] = useState({ w: 0, h: 0 });
   const MAGNIFIER_SIZE = 120;
   const MAGNIFIER_ZOOM = 5;
 
@@ -256,43 +258,76 @@ const ColorPicker = () => {
     reader.onload = (ev) => {
       const img = new Image();
       img.onload = () => {
+        console.log("✓ Image loaded:", img.width, "x", img.height);
+        
+        const maxW = 600;
+        const maxH = 340;
+        let w = img.width;
+        let h = img.height;
+
+        if (w > maxW) {
+          h = (h * maxW) / w;
+          w = maxW;
+        }
+        if (h > maxH) {
+          w = (w * maxH) / h;
+          h = maxH;
+        }
+
+        w = Math.round(w);
+        h = Math.round(h);
+
+        imageDataRef.current = {
+          img: img,
+          width: w,
+          height: h
+        };
+
+        setImageDimensions({ w, h });
         setImageLoaded(true);
         setImagePickedColor(null);
         setEyedropperActive(false);
-
-        setTimeout(() => {
-          const canvas = imageCanvasRef.current;
-          if (!canvas) return; 
-
-          const ctx = canvas.getContext("2d");
-          const maxW = 600,
-            maxH = 340;
-          let w = img.width,
-            h = img.height;
-
-          if (w > maxW) {
-            h = (h * maxW) / w;
-            w = maxW;
-          }
-          if (h > maxH) {
-            w = (w * maxH) / h;
-            h = maxH;
-          }
-
-          canvas.width = Math.round(w);
-          canvas.height = Math.round(h);
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        }, 0);
       };
+      
+      img.onerror = () => {
+        console.error("Failed to load image");
+      };
+      
       img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   };
 
-  const drawMagnifier = (canvas, x, y) => {
+  useEffect(() => {
+    if (!imageLoaded || !imageDataRef.current) return;
+
+    const canvas = imageCanvasRef.current;
+    if (!canvas) {
+      console.error("Canvas ref not found");
+      return;
+    }
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      console.error("Canvas context failed");
+      return;
+    }
+
+    const { img, width, height } = imageDataRef.current;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.drawImage(img, 0, 0, width, height);
+
+  }, [imageLoaded]);
+
+  const drawMagnifier = useCallback((canvas, x, y) => {
     const magCanvas = magnifierCanvasRef.current;
     if (!magCanvas) return;
     const magCtx = magCanvas.getContext("2d");
+    if (!magCtx) return;
+
     const half = MAGNIFIER_SIZE / 2;
     const srcSize = MAGNIFIER_SIZE / MAGNIFIER_ZOOM;
 
@@ -316,7 +351,6 @@ const ColorPicker = () => {
       MAGNIFIER_SIZE
     );
 
-    // Grid crosshair
     magCtx.strokeStyle = "rgba(255,255,255,0.6)";
     magCtx.lineWidth = 1;
     magCtx.beginPath();
@@ -328,57 +362,76 @@ const ColorPicker = () => {
 
     magCtx.restore();
 
-    // Border
     magCtx.beginPath();
     magCtx.arc(half, half, half - 1, 0, Math.PI * 2);
     magCtx.strokeStyle = "rgba(255,255,255,0.85)";
     magCtx.lineWidth = 3;
     magCtx.stroke();
-  };
+  }, [MAGNIFIER_SIZE, MAGNIFIER_ZOOM]);
 
-  const getCanvasCoords = (e) => {
+  const getCanvasCoords = useCallback((e) => {
     const canvas = imageCanvasRef.current;
+    if (!canvas) return { x: 0, y: 0, displayX: 0, displayY: 0 };
+
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
+    const x = Math.floor((e.clientX - rect.left) * scaleX);
+    const y = Math.floor((e.clientY - rect.top) * scaleY);
+
     return {
-      x: Math.floor((e.clientX - rect.left) * scaleX),
-      y: Math.floor((e.clientY - rect.top) * scaleY),
-      clientX: e.clientX,
-      clientY: e.clientY,
+      x,
+      y,
+      displayX: e.clientX - rect.left,
+      displayY: e.clientY - rect.top,
     };
-  };
+  }, []);
 
-  const handleImageMouseMove = (e) => {
+  const handleImageMouseMove = useCallback((e) => {
     if (!eyedropperActive || !imageLoaded) return;
-    const { x, y, clientX, clientY } = getCanvasCoords(e);
+    
     const canvas = imageCanvasRef.current;
-    const rect = canvas.getBoundingClientRect();
+    if (!canvas) return;
 
-    setMagnifierPos({
-      x: clientX - rect.left,
-      y: clientY - rect.top,
-    });
+    const { x, y, displayX, displayY } = getCanvasCoords(e);
+    
+    if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) {
+      setShowMagnifier(false);
+      return;
+    }
+
+    setMagnifierPos({ x: displayX, y: displayY });
     setShowMagnifier(true);
+    
     drawMagnifier(canvas, x, y);
 
     const rgb = getColorAtPixel(canvas, x, y);
     const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+        
     setImagePickedColor({ rgb, hex });
-  };
+  }, [eyedropperActive, imageLoaded, getCanvasCoords, drawMagnifier]);
 
-  const handleImageClick = (e) => {
+  const handleImageClick = useCallback((e) => {
     if (!eyedropperActive || !imageLoaded) return;
-    const { x, y } = getCanvasCoords(e);
+    
     const canvas = imageCanvasRef.current;
+    if (!canvas) return;
+
+    const { x, y } = getCanvasCoords(e);
+    
+    if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return;
+
     const rgb = getColorAtPixel(canvas, x, y);
     const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+    
+    console.log(`✓ Color picked: ${hex}`);
+    
     setImagePickedColor({ rgb, hex });
     setHexColor(hex);
     setRgbColor(rgb);
     setEyedropperActive(false);
     setShowMagnifier(false);
-  };
+  }, [eyedropperActive, imageLoaded, getCanvasCoords]);
 
   const handleImageMouseLeave = () => {
     setShowMagnifier(false);
@@ -529,6 +582,28 @@ const ColorPicker = () => {
         </div>
       </div>
 
+      {colorHistory.length > 0 && (
+        <div className="card history-card">
+          <div className="card-header">
+            <h3>Saved Colors</h3>
+            <span className="history-count">{colorHistory.length} / 10</span>
+          </div>
+          <div className="card-content">
+            <div className="history-swatches">
+              {colorHistory.map((hex, i) => (
+                <button
+                  key={i}
+                  className="swatch"
+                  style={{ backgroundColor: hex }}
+                  onClick={() => selectFromHistory(hex)}
+                  title={hex}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="card image-picker-card">
         <div className="card-header">
           <h3>Image Eyedropper</h3>
@@ -551,7 +626,6 @@ const ColorPicker = () => {
                 }
               }}
             >
-              <div className="drop-zone-icon">🖼️</div>
               <p className="drop-zone-text">Click or drag an image here</p>
               <p className="drop-zone-hint">PNG, JPG, WEBP, GIF …</p>
               <input
@@ -576,6 +650,7 @@ const ColorPicker = () => {
                     borderRadius: "8px",
                     display: "block",
                     maxWidth: "100%",
+                    backgroundColor: "#f0f0f0",
                   }}
                   onMouseMove={handleImageMouseMove}
                   onMouseLeave={handleImageMouseLeave}
@@ -628,12 +703,11 @@ const ColorPicker = () => {
                     setEyedropperActive((v) => !v);
                     setShowMagnifier(false);
                   }}
-                  title="Pipette aktivieren"
+                  title="Activate Eyedropper"
                 >
-                  <span style={{ fontSize: 18 }}>🔬</span>
                   {eyedropperActive
-                    ? "Pipette aktiv – klicken zum Aufnehmen"
-                    : "Pipette aktivieren"}
+                    ? "Eyedropper activated – click on the picture to pick colour"
+                    : "Activate Eyedropper"}
                 </button>
 
                 {imagePickedColor && (
@@ -651,16 +725,6 @@ const ColorPicker = () => {
                         {imagePickedColor.rgb.b})
                       </span>
                     </div>
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => {
-                        setHexColor(imagePickedColor.hex);
-                        setRgbColor(imagePickedColor.rgb);
-                        addToHistory();
-                      }}
-                    >
-                      Übernehmen &amp; Speichern
-                    </button>
                   </div>
                 )}
 
@@ -671,38 +735,17 @@ const ColorPicker = () => {
                     setImageLoaded(false);
                     setImagePickedColor(null);
                     setEyedropperActive(false);
+                    imageDataRef.current = null;
                     if (fileInputRef.current) fileInputRef.current.value = "";
                   }}
                 >
-                  Anderes Bild laden
+                  Remove picture
                 </button>
               </div>
             </div>
           )}
         </div>
       </div>
-
-      {colorHistory.length > 0 && (
-        <div className="card history-card">
-          <div className="card-header">
-            <h3>Saved Colors</h3>
-            <span className="history-count">{colorHistory.length} / 10</span>
-          </div>
-          <div className="card-content">
-            <div className="history-swatches">
-              {colorHistory.map((hex, i) => (
-                <button
-                  key={i}
-                  className="swatch"
-                  style={{ backgroundColor: hex }}
-                  onClick={() => selectFromHistory(hex)}
-                  title={hex}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="card info-bottom-card">
         <div className="card-header">
